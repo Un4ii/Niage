@@ -40,4 +40,36 @@ public abstract class Camera {
     abstract void updateUBO();
 
     abstract void dispose();
+
+    public Vector3f position() {
+        return position;
+    }
+
+    public Vector3f front() {
+        return front;
+    }
+
+    public Vector3f right() {
+        return right;
+    }
+
+    public Vector3f up() {
+        return up;
+    }
+
+    public Matrix4f view() {
+        return view;
+    }
+
+    public float FOV() {
+        return FOV;
+    }
+
+    public float zNear() {
+        return zNear;
+    }
+
+    public float zFar() {
+        return zFar;
+    }
 }

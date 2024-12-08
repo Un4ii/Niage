@@ -107,4 +107,9 @@ public class OrthographicCamera extends Camera {
         MemoryUtil.memFree(buffer);
         GL15.glDeleteBuffers(cameraUBO);
     }
+
+    public Matrix4f projection() {
+        return projection;
+    }
+
 }
