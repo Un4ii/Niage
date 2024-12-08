@@ -88,7 +88,7 @@ public class PerspectiveCamera extends Camera {
 
         int error = GL11.glGetError();
         if (error != GL11.GL_NO_ERROR) {
-            System.out.println("OpenGL Error: " + error);
+            throw new RuntimeException("ERROR::CAMERA::PERSPECTIVE::UBO::UPDATE\\n" + error);
         }
     }
 
