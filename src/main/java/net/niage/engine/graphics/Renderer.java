@@ -1,5 +1,6 @@
 package net.niage.engine.graphics;
 
+import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 
@@ -18,6 +19,7 @@ public class Renderer {
     public void render(Model model) {
         model.meshes().forEach(mesh -> {
             mesh.material().diffuseTexture().activate();
+            mesh.material().specularTexture().activate();
             GL30.glBindVertexArray(mesh.VAO());
 
             shader.setMat4("model.transform", model.transform());
@@ -25,8 +27,10 @@ public class Renderer {
             GL20.glDrawElements(GL20.GL_TRIANGLES, mesh.indicesLenght(), GL20.GL_UNSIGNED_INT, 0);
 
             mesh.material().diffuseTexture().deactivate();
+            mesh.material().specularTexture().deactivate();
         });
         GL30.glBindVertexArray(0);
+
     }
 
     private void setMeshMaterial(Mesh mesh) {
@@ -40,5 +44,18 @@ public class Renderer {
 
     public void end() {
         Shader.unbind();
+    }
+
+    public static int COLOR_BUFFER_BIT = GL11.GL_COLOR_BUFFER_BIT;
+    public static int DEPTH_BUFFER_BIT = GL11.GL_DEPTH_BUFFER_BIT;
+    public static int STENCIL_BUFFER_BIT = GL11.GL_STENCIL_BUFFER_BIT;
+    public static int ACCUM_BUFFER_BIT = GL11.GL_ACCUM_BUFFER_BIT;
+
+    public static void glClear(int mask) {
+        GL11.glClear(mask);
+    }
+
+    public static void glClearColor(float r, float g, float b, float a) {
+        GL11.glClearColor(r, g, b, a);
     }
 }

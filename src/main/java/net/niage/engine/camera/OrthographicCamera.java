@@ -24,12 +24,12 @@ public class OrthographicCamera extends Camera {
     }
 
     @Override
-    void create() {
+    protected void create() {
         projection.setOrtho(left, right, bottom, top, zNear, zFar);
     }
 
     @Override
-    void update() {
+    public void update() {
         super.right.set(front).cross(worldUp).normalize();
         up.set(right).cross(front).normalize();
 
@@ -39,7 +39,7 @@ public class OrthographicCamera extends Camera {
     }
 
     @Override
-    void updateAspectRatio(int width, int height) {
+    public void updateAspectRatio(int width, int height) {
         float aspect = (float) width / height;
         float verticalSize = top - bottom;
 
@@ -61,30 +61,32 @@ public class OrthographicCamera extends Camera {
     }
 
     @Override
-    void lookAt(Vector3f target) {
+    public void lookAt(Vector3f target) {
         front.set(target).sub(position).normalize();
     }
 
     @Override
-    void lookAt(float x, float y, float z) {
+    public void lookAt(float x, float y, float z) {
         front.set(x, y, z).sub(position).normalize();
     }
 
     private int cameraUBO;
     private final int uboSize = 16 * 4 + 16 * 4 + 3 * 4;
-    private FloatBuffer buffer = BufferUtils.createFloatBuffer(uboSize / Float.BYTES);
+    private FloatBuffer buffer;
 
     @Override
-    void createUBO() {
+    protected void createUBO() {
         cameraUBO = GL15.glGenBuffers();
 
         GL15.glBindBuffer(GL31.GL_UNIFORM_BUFFER, cameraUBO);
         GL15.glBufferData(GL31.GL_UNIFORM_BUFFER, uboSize, GL15.GL_DYNAMIC_DRAW);
         GL30.glBindBufferBase(GL31.GL_UNIFORM_BUFFER, 0, cameraUBO);
+
+        buffer = BufferUtils.createFloatBuffer(uboSize / Float.BYTES);
     }
 
     @Override
-    void updateUBO() {
+    protected void updateUBO() {
         buffer.clear();
         buffer.put(projection.get(new float[16]));
         buffer.put(view.get(new float[16]));
@@ -96,12 +98,12 @@ public class OrthographicCamera extends Camera {
 
         int error = GL11.glGetError();
         if (error != GL11.GL_NO_ERROR) {
-            throw new RuntimeException("ERROR::CAMERA::ORTHOGRAPHIC::UBO::UPDATE\\n" + error);
+            throw new RuntimeException("ERROR::CAMERA::ORTHOGRAPHIC::UBO::UPDATE\n" + error);
         }
     }
 
     @Override
-    void dispose() {
+    public void dispose() {
         MemoryUtil.memFree(buffer);
         GL15.glDeleteBuffers(cameraUBO);
     }

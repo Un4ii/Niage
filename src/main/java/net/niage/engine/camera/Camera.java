@@ -22,25 +22,25 @@ public abstract class Camera {
         this.zNear = zNear;
         this.zFar = zFar;
         create();
-        update();
         createUBO();
+        update();
     }
 
-    abstract void create();
+    protected abstract void create();
 
-    abstract void update();
+    public abstract void update();
 
-    abstract void updateAspectRatio(int width, int height);
+    public abstract void updateAspectRatio(int width, int height);
 
-    abstract void lookAt(Vector3f target);
+    public abstract void lookAt(Vector3f target);
 
-    abstract void lookAt(float x, float y, float z);
+    public abstract void lookAt(float x, float y, float z);
 
-    abstract void createUBO();
+    protected abstract void createUBO();
 
-    abstract void updateUBO();
+    protected abstract void updateUBO();
 
-    abstract void dispose();
+    public abstract void dispose();
 
     public Vector3f position() {
         return position;

@@ -1,9 +1,5 @@
 package net.niage.engine.graphics;
 
-import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
-
-import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
@@ -23,28 +19,21 @@ public class Mesh {
     }
 
     private void init(float[] vertices, int[] indices) {
+        // Create VAO, VBO & EBO
         VAO = GL30.glGenVertexArrays();
+        VBO = GL15.glGenBuffers();
+        EBO = GL15.glGenBuffers();
+
+        // Use VAO for the following bindings
         GL30.glBindVertexArray(VAO);
 
-        VBO = GL15.glGenBuffers();
+        // Bind the VBO to the VAO and put the vertex info into the VBO
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, VBO);
-        try {
-            FloatBuffer vertexBuffer = BufferUtils.createFloatBuffer(vertices.length);
-            vertexBuffer.put(vertices).flip();
-            GL15.glBufferData(GL15.GL_ARRAY_BUFFER, vertexBuffer, GL15.GL_STATIC_DRAW);
-        } catch (Exception e) {
-            throw new RuntimeException("ERROR::MESH::VBO::BUFFER\n" + e);
-        }
+        GL15.glBufferData(GL15.GL_ARRAY_BUFFER, vertices, GL15.GL_STATIC_DRAW);
 
-        EBO = GL15.glGenBuffers();
+        // Bind the EBO to the VAO and put the indices info into the EBO
         GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, EBO);
-        try {
-            IntBuffer indexBuffer = BufferUtils.createIntBuffer(indices.length);
-            indexBuffer.put(indices).flip();
-            GL15.glBufferData(GL15.GL_ELEMENT_ARRAY_BUFFER, indexBuffer, GL15.GL_STATIC_DRAW);
-        } catch (Exception e) {
-            throw new RuntimeException("ERROR::MESH::EBO::BUFFER\n" + e);
-        }
+        GL15.glBufferData(GL15.GL_ELEMENT_ARRAY_BUFFER, indices, GL15.GL_STATIC_DRAW);
 
         // Set the first 3 floats of the buffer as the vertices
         GL20.glVertexAttribPointer(0, 3, GL15.GL_FLOAT, false, 8 * Float.BYTES, 0);
@@ -58,6 +47,7 @@ public class Mesh {
         GL20.glVertexAttribPointer(2, 2, GL20.GL_FLOAT, false, 8 * Float.BYTES, 6 * Float.BYTES);
         GL20.glEnableVertexAttribArray(2);
 
+        // Unbind VAO / Stop using it for the calls
         GL30.glBindVertexArray(0);
     }
 

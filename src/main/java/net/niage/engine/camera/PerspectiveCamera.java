@@ -23,8 +23,8 @@ public class PerspectiveCamera extends Camera {
     }
 
     @Override
-    void create() {
-        projection.setPerspective(
+    protected void create() {
+        projection.perspective(
                 (float) Math.toRadians(FOV),
                 (float) viewportWidth / (float) viewportHeight,
                 zNear,
@@ -32,7 +32,7 @@ public class PerspectiveCamera extends Camera {
     }
 
     @Override
-    void update() {
+    public void update() {
         right.set(front).cross(worldUp).normalize();
         up.set(right).cross(front).normalize();
 
@@ -42,7 +42,7 @@ public class PerspectiveCamera extends Camera {
     }
 
     @Override
-    void updateAspectRatio(int width, int height) {
+    public void updateAspectRatio(int width, int height) {
         projection.setPerspective(
                 (float) Math.toRadians(FOV),
                 (float) viewportWidth / (float) viewportHeight,
@@ -51,35 +51,41 @@ public class PerspectiveCamera extends Camera {
     }
 
     @Override
-    void lookAt(Vector3f target) {
+    public void lookAt(Vector3f target) {
         front.set(target).sub(position).normalize();
+        update();
 
     }
 
     @Override
-    void lookAt(float x, float y, float z) {
+    public void lookAt(float x, float y, float z) {
         front.set(x, y, z).sub(position).normalize();
+        update();
     }
 
     private int cameraUBO;
-    private final int uboSize = 16 * 4 + 16 * 4 + 3 * 4;
-    private FloatBuffer buffer = BufferUtils.createFloatBuffer(uboSize / Float.BYTES);;
+    private final int uboSize = (16 * 4) + (16 * 4) + (4 * 4);
+
+    private FloatBuffer buffer;
 
     @Override
-    void createUBO() {
+    protected void createUBO() {
         cameraUBO = GL15.glGenBuffers();
 
         GL15.glBindBuffer(GL31.GL_UNIFORM_BUFFER, cameraUBO);
         GL15.glBufferData(GL31.GL_UNIFORM_BUFFER, uboSize, GL15.GL_DYNAMIC_DRAW);
         GL30.glBindBufferBase(GL31.GL_UNIFORM_BUFFER, 0, cameraUBO);
+
+        buffer = BufferUtils.createFloatBuffer(uboSize / Float.BYTES);
     }
 
     @Override
-    void updateUBO() {
+    protected void updateUBO() {
         buffer.clear();
         buffer.put(projection.get(new float[16]));
         buffer.put(view.get(new float[16]));
         buffer.put(new float[] { position.x, position.y, position.z });
+        buffer.put(0.0f);
         buffer.flip();
 
         GL15.glBindBuffer(GL31.GL_UNIFORM_BUFFER, cameraUBO);
@@ -92,7 +98,7 @@ public class PerspectiveCamera extends Camera {
     }
 
     @Override
-    void dispose() {
+    public void dispose() {
         MemoryUtil.memFree(buffer);
         GL15.glDeleteBuffers(cameraUBO);
     }

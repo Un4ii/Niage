@@ -43,8 +43,8 @@ public class Window {
         GL.createCapabilities();
 
         GL11.glEnable(GL11.GL_DEPTH_TEST);
-        GL11.glEnable(GL11.GL_CULL_FACE);
         GL15.glEnable(GL15.GL_MULTISAMPLE);
+        GL11.glEnable(GL11.GL_CULL_FACE);
 
         GL11.glViewport(0, 0, width, height);
 
