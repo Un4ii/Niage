@@ -7,7 +7,7 @@ public class Launcher {
         try {
             new Game().run();
         } catch (Exception e) {
-            throw new RuntimeException("ERROR::LAUNCHER::LAUNCH\n" + e);
+            throw new RuntimeException("ERROR::LAUNCHER::START\n" + e);
         }
     }
 }

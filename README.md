@@ -1,7 +1,6 @@
 # TODO
 
 -   First Person Controller
--   Graphics folder
 
 # UBOs
 

@@ -7,7 +7,7 @@ public class TextureCubemap {
     public final int ID;
 
     public TextureCubemap(String assetsFolder) throws Exception {
-        String path = assetsFolder.endsWith("/") ? "assets/" + assetsFolder : "assets/" + assetsFolder + "/";
+        String path = assetsFolder.endsWith("/") ? assetsFolder : assetsFolder + "/";
         String extensions[] = { ".png", ".jpg", ".jpeg" };
 
         File[] images = new File[6];
@@ -45,7 +45,7 @@ public class TextureCubemap {
 
         for (File image : images) {
             if (image == null) {
-                throw new Exception("Missing one or more cubemap textures.");
+                throw new RuntimeException("ERROR::TEXTURE::CUBEMAP::MISSING_TEXTURES");
             }
         }
 

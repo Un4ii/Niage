@@ -15,12 +15,11 @@ public class Game extends Engine {
 
     @Override
     protected void render() {
-
     }
 
     @Override
     protected void update(double deltaTime) {
-        super.window.setTitle("" + super.timer.FPS());
+        super.window.setTitle(super.timer.fps() + "  -  " + super.timer.tps());
     }
 
     @Override
