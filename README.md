@@ -15,3 +15,17 @@
     - mat4 projection
     - mat4 view
     - vec3 pos
+
+# Material struct
+
+-   vec3 diffuseColor
+-   vec3 specularColor
+-   sampler2D diffuseTexture
+-   sampler2D specularTexture
+-   float shininess
+-   bool useTextures
+
+# Model struct
+
+-   mat4 transform
+-   Material material

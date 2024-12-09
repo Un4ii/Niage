@@ -4,6 +4,7 @@ import java.io.File;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 
+import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL15;
@@ -119,6 +120,23 @@ public class TextureManager {
     @FunctionalInterface
     private static interface ImageCallback {
         void process(ByteBuffer data, int width, int height, int nrChannels);
+    }
+
+    // Dummy texture
+    public static int dummyTexture() {
+        ByteBuffer buffer = BufferUtils.createByteBuffer(4); // 1 píxel, 4 componentes (RGBA)
+        buffer.put((byte) 255).put((byte) 255).put((byte) 255).put((byte) 255); // Blanco (1.0, 1.0, 1.0, 1.0)
+        buffer.flip();
+
+        int textureID = GL11.glGenTextures();
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureID);
+        GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, 1, 1, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
+
+        // Configurar parámetros básicos
+        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
+        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
+
+        return textureID;
     }
 
 }

@@ -13,6 +13,7 @@ public abstract class Camera {
     protected Vector3f up = new Vector3f();
 
     protected Matrix4f view = new Matrix4f().identity();
+    protected Matrix4f projection = new Matrix4f().identity();
 
     protected float FOV, zNear, zFar;
 

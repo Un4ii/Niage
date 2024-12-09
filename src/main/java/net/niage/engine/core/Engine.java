@@ -6,8 +6,6 @@ import net.niage.engine.input.InputHandler;
 
 public abstract class Engine {
 
-    // TODO : graphics
-
     protected Window window;
     protected Timer timer;
 
@@ -40,14 +38,14 @@ public abstract class Engine {
             timer.update();
 
             if (timer.shouldUpdate()) {
-                update(timer.getDeltaTime());
+                update(timer.deltaTime()); // Lógica del juego
             }
 
             if (timer.shouldRender()) {
-                render();
+                render(); // Renderizado
             }
 
-            timer.waitForNextFrame();
+            timer.waitForNextFrame(); // Espera hasta el siguiente fotograma
 
             window.update();
         }
@@ -56,13 +54,13 @@ public abstract class Engine {
         cleanup();
     }
 
-    abstract void create() throws Exception;
+    protected abstract void create() throws Exception;
 
-    abstract void render();
+    protected abstract void render();
 
-    abstract void update(double deltaTime);
+    protected abstract void update(double deltaTime);
 
-    abstract void resize(int width, int height);
+    protected abstract void resize(int width, int height);
 
-    abstract void cleanup();
+    protected abstract void cleanup();
 }

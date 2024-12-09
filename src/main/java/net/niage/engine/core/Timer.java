@@ -11,6 +11,10 @@ public class Timer {
     private double lastUpdateTime = 0.0;
     private double lastRenderTime = 0.0;
 
+    private int frameCount = 0;
+    private double fpsTime = 0.0;
+    private int FPS = 0;
+
     public Timer() {
         this.lastTime = System.nanoTime() / 1_000_000_000.0;
     }
@@ -19,6 +23,14 @@ public class Timer {
         double currentTime = System.nanoTime() / 1_000_000_000.0;
         deltaTime = currentTime - lastTime;
         lastTime = currentTime;
+
+        frameCount++;
+        fpsTime += deltaTime;
+        if (fpsTime >= 1.0) {
+            FPS = frameCount;
+            frameCount = 0;
+            fpsTime = 0.0;
+        }
     }
 
     public boolean shouldUpdate() {
@@ -48,7 +60,7 @@ public class Timer {
         }
     }
 
-    public double getDeltaTime() {
+    public double deltaTime() {
         return deltaTime;
     }
 
@@ -57,7 +69,11 @@ public class Timer {
         this.frameInterval = 1.0 / frameRate;
     }
 
-    public double getFrameRate() {
+    public double frameRate() {
         return frameRate;
+    }
+
+    public double FPS() {
+        return FPS;
     }
 }

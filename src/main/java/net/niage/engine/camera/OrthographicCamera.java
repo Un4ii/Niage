@@ -13,8 +13,6 @@ import org.lwjgl.system.MemoryUtil;
 
 public class OrthographicCamera extends Camera {
 
-    private Matrix4f projection = new Matrix4f().identity();
-
     private float left, right, bottom, top;
 
     public OrthographicCamera(float left, float right, float bottom, float top, float zNear, float zFar) {

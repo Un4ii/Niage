@@ -10,6 +10,10 @@ public class Texture2D {
         this.ID = TextureManager.loadImage2D(image);
     }
 
+    public Texture2D() {
+        this.ID = TextureManager.dummyTexture();
+    }
+
     public void activate() {
         TextureManager.activate2D(this);
     }

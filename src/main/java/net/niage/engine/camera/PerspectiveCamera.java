@@ -15,7 +15,6 @@ import org.lwjgl.system.MemoryUtil;
 public class PerspectiveCamera extends Camera {
 
     private int viewportWidth, viewportHeight;
-    private Matrix4f projection = new Matrix4f().identity();
 
     public PerspectiveCamera(float FOV, float zNear, float zFar, int viewportWidth, int viewportHeight) {
         super(FOV, zNear, zFar);
