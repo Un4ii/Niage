@@ -39,7 +39,7 @@ public class PerspectiveCamera extends Camera {
         right.set(front).cross(worldUp).normalize();
         up.set(right).cross(front).normalize();
 
-        view.identity().lookAt(position, new Vector3f(position).add(front), up);
+        view.setLookAt(position, new Vector3f(position).add(front), up);
 
         updateUBO();
     }
@@ -56,14 +56,11 @@ public class PerspectiveCamera extends Camera {
     @Override
     public void lookAt(Vector3f target) {
         front.set(target).sub(position).normalize();
-        update();
-
     }
 
     @Override
     public void lookAt(float x, float y, float z) {
         front.set(x, y, z).sub(position).normalize();
-        update();
     }
 
     private int cameraUBO;

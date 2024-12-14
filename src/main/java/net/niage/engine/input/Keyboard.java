@@ -18,4 +18,13 @@ public class Keyboard {
     public boolean isPressed(int glfwKey) {
         return pressedKeys[glfwKey];
     }
+
+    public boolean isAnyPressed() {
+        for (boolean pressed : pressedKeys) {
+            if (pressed) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

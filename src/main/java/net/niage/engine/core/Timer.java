@@ -16,10 +16,10 @@ public class Timer {
 
     private int frameCount = 0;
     private double fpsTime = 0.0;
-    public int fps = 0;
+    private int fps = 0;
 
     private int tickCount = 0;
-    public int tps = 0;
+    private int tps = 0;
 
     public Timer() {
         this.lastTime = System.nanoTime() / 1_000_000_000.0;

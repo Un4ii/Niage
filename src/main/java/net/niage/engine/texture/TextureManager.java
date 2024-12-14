@@ -12,8 +12,6 @@ import org.lwjgl.opengl.GL30;
 import org.lwjgl.stb.STBImage;
 import org.lwjgl.system.MemoryStack;
 
-import net.niage.engine.utils.FileUtils;
-
 public class TextureManager {
 
     // Texture 2D
