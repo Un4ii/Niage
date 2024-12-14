@@ -27,9 +27,9 @@ public class PerspectiveCamera extends Camera {
 
     @Override
     protected void create() {
-        projection.perspective(
-                Math.toRadians(FOV),
-                (float) (viewportWidth / viewportHeight),
+        projection.setPerspective(
+                (float) Math.toRadians(FOV),
+                (float) viewportWidth / (float) viewportHeight,
                 zNear,
                 zFar);
     }
