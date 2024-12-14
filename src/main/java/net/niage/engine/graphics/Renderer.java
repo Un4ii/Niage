@@ -6,14 +6,14 @@ import org.lwjgl.opengl.GL30;
 
 public class Renderer {
 
-    private final Shader shader;
+    private Shader shader;
 
-    public Renderer(Shader shader) {
-        this.shader = shader;
+    public Renderer() {
     }
 
-    public void start() {
-        shader.bind();
+    public void start(Shader shader) {
+        this.shader = shader;
+        this.shader.bind();
     }
 
     public void render(Model model) {
@@ -39,7 +39,8 @@ public class Renderer {
         shader.setInt("model.material.diffuseTexture", mesh.material().diffuseTexture().ID());
         shader.setInt("model.material.specularTexture", mesh.material().specularTexture().ID());
         shader.setFloat("model.material.shininess", mesh.material().shininess());
-        shader.setBool("model.material.useTextures", mesh.material().useTextures());
+        shader.setBool("model.material.useDiffuseTexture", mesh.material().useDiffuseTexture());
+        shader.setBool("model.material.useSpecularTexture", mesh.material().useSpecularTexture());
     }
 
     public void end() {

@@ -7,7 +7,8 @@ struct Material {
     sampler2D diffuseTexture;
     sampler2D specularTexture;
     float shininess;
-    bool useTextures;
+    bool useDiffuseTexture;
+    bool useSpecularTexture;
 };
 
 struct Model {
@@ -15,8 +16,24 @@ struct Model {
     Material material;
 };
 
+struct attribInfo {
+    vec3 aPos;
+    vec3 aNormal;
+    vec2 aTexCoord;
+};
+
 uniform Model model;
+in attribInfo aInfo;
 
 void main() {
-    FragColor = vec4(model.material.diffuseColor, 1.0);
+
+    vec3 diffuse = vec3(0.0);
+
+    if (model.material.useDiffuseTexture) {
+        diffuse = texture(model.material.diffuseTexture, aInfo.aTexCoord).rgb;
+    } else {
+        diffuse = model.material.diffuseColor;
+    }
+
+    FragColor = vec4(diffuse, 1.0);
 }

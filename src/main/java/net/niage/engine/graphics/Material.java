@@ -11,7 +11,8 @@ public class Material {
     private Texture2D diffuseTexture;
     private Texture2D specularTexture;
     private float shininess;
-    private final boolean useTextures;
+    private final boolean useDiffuseTexture;
+    private final boolean useSpecularTexture;
 
     public Material(Vector3f diffuseColor, Vector3f specularColor, float shininess) {
         this.diffuseColor = diffuseColor;
@@ -19,7 +20,8 @@ public class Material {
         this.shininess = shininess;
         this.diffuseTexture = new Texture2D();
         this.specularTexture = new Texture2D();
-        this.useTextures = false;
+        this.useDiffuseTexture = false;
+        this.useSpecularTexture = false;
     }
 
     public Material(Texture2D diffuseTexture, Texture2D specularTexture, float shininess) {
@@ -28,7 +30,19 @@ public class Material {
         this.shininess = shininess;
         this.diffuseTexture = diffuseTexture;
         this.specularTexture = specularTexture;
-        this.useTextures = true;
+        this.useDiffuseTexture = true;
+        this.useSpecularTexture = true;
+    }
+
+    public Material(Vector3f diffuseColor, Vector3f specularColor, float shininess, Texture2D diffuseTexture,
+            Texture2D specularTexture, boolean useDiffuseTexture, boolean useSpecularTexture) {
+        this.diffuseColor = diffuseColor;
+        this.specularColor = specularColor;
+        this.shininess = shininess;
+        this.diffuseTexture = diffuseTexture;
+        this.specularTexture = specularTexture;
+        this.useDiffuseTexture = useDiffuseTexture;
+        this.useSpecularTexture = useSpecularTexture;
     }
 
     public Vector3f diffuseColor() {
@@ -51,8 +65,12 @@ public class Material {
         return shininess;
     }
 
-    public boolean useTextures() {
-        return useTextures;
+    public boolean useDiffuseTexture() {
+        return useDiffuseTexture;
+    }
+
+    public boolean useSpecularTexture() {
+        return useSpecularTexture;
     }
 
 }

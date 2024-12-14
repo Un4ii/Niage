@@ -16,7 +16,8 @@ struct Material {
     sampler2D diffuseTexture;
     sampler2D specularTexture;
     float shininess;
-    bool useTextures;
+    bool useDiffuseTexture;
+    bool useSpecularTexture;
 };
 
 struct Model {
@@ -24,11 +25,18 @@ struct Model {
     Material material;
 };
 
-uniform Model model;
+struct attribInfo {
+    vec3 aPos;
+    vec3 aNormal;
+    vec2 aTexCoord;
+};
 
-uniform mat4 view;
-uniform mat4 projection;
+uniform Model model;
+out attribInfo aInfo;
 
 void main() {
+    aInfo.aPos = aPos;
+    aInfo.aNormal = aNormal;
+    aInfo.aTexCoord = aTexCoord;
     gl_Position = perspectiveProjection * cameraView * model.transform * vec4(aPos, 1.0);
 }

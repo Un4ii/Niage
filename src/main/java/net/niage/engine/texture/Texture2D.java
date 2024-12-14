@@ -1,13 +1,13 @@
 package net.niage.engine.texture;
 
-import java.io.File;
+import net.niage.engine.utils.FileUtils;
 
 public class Texture2D {
 
     private final int ID;
 
-    public Texture2D(File image) {
-        this.ID = TextureManager.loadImage2D(image);
+    public Texture2D(String imagePath) {
+        this.ID = TextureManager.loadImage2D(FileUtils.getFile(imagePath));
     }
 
     public Texture2D() {

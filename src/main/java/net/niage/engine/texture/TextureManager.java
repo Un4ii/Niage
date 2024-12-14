@@ -12,6 +12,8 @@ import org.lwjgl.opengl.GL30;
 import org.lwjgl.stb.STBImage;
 import org.lwjgl.system.MemoryStack;
 
+import net.niage.engine.utils.FileUtils;
+
 public class TextureManager {
 
     // Texture 2D
@@ -106,7 +108,6 @@ public class TextureManager {
 
             STBImage.stbi_set_flip_vertically_on_load(false);
             ByteBuffer data = STBImage.stbi_load(filePath, width, height, nrChannels, 0);
-
             if (data != null) {
                 callback.process(data, width.get(), height.get(), nrChannels.get());
 
