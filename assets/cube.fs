@@ -18,5 +18,5 @@ struct Model {
 uniform Model model;
 
 void main() {
-    FragColor = vec4(vec3(1.0), 1.0);
+    FragColor = vec4(model.material.diffuseColor, 1.0);
 }

@@ -61,11 +61,15 @@ public class Shader {
         int cameraUniformIndex = GL31.glGetUniformBlockIndex(ID, "PerspectiveCamera");
         if (cameraUniformIndex != -1) {
             GL31.glUniformBlockBinding(ID, cameraUniformIndex, 0);
+        } else {
+            System.err.println("WARNING::SHADER::UBO::PERSPECTIVE\nCamera uniform not found");
         }
 
         cameraUniformIndex = GL31.glGetUniformBlockIndex(ID, "OrthographicCamera");
         if (cameraUniformIndex != -1) {
             GL31.glUniformBlockBinding(ID, cameraUniformIndex, 0);
+        } else {
+            System.err.println("WARNING::SHADER::UBO::ORTHOGRAPHIC\nCamera uniform not found");
         }
     }
 
@@ -81,7 +85,7 @@ public class Shader {
         GL20.glDeleteProgram(ID);
     }
 
-    public int getID() {
+    public int ID() {
         return ID;
     }
 

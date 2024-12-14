@@ -26,6 +26,9 @@ struct Model {
 
 uniform Model model;
 
+uniform mat4 view;
+uniform mat4 projection;
+
 void main() {
     gl_Position = perspectiveProjection * cameraView * model.transform * vec4(aPos, 1.0);
 }

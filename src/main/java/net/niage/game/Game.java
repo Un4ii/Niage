@@ -28,14 +28,14 @@ public class Game extends Engine {
     @Override
     protected void create() throws Exception {
         camera = new PerspectiveCamera(70, 0.01f, 100.0f, window.getWidth(), window.getHeight());
-        camera.position().set(5.0f, 0f, -5f);
+        camera.position().set(5.0f, 5.0f, -5f);
         camera.lookAt(0, 0, 0);
         camera.update();
 
         shader = new Shader("assets/cube.vs", "assets/cube.fs");
         renderer = new Renderer(shader);
 
-        cubeMaterial = new Material(new Vector3f(1.0f), new Vector3f(0.0f), 0);
+        cubeMaterial = new Material(new Vector3f(1.0f, 0.0f, 0.0f), new Vector3f(0.0f), 0);
         cubeMesh = new Mesh(vertices, indices, cubeMaterial);
         cube = new Model(cubeMesh);
     }

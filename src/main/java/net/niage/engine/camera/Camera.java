@@ -21,9 +21,6 @@ public abstract class Camera {
         this.FOV = FOV;
         this.zNear = zNear;
         this.zFar = zFar;
-        create();
-        createUBO();
-        update();
     }
 
     protected abstract void create();

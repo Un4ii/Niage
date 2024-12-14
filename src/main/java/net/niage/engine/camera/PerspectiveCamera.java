@@ -20,13 +20,16 @@ public class PerspectiveCamera extends Camera {
         super(FOV, zNear, zFar);
         this.viewportWidth = viewportWidth;
         this.viewportHeight = viewportHeight;
+        create();
+        createUBO();
+        update();
     }
 
     @Override
     protected void create() {
         projection.perspective(
-                (float) Math.toRadians(FOV),
-                (float) viewportWidth / (float) viewportHeight,
+                Math.toRadians(FOV),
+                (float) (viewportWidth / viewportHeight),
                 zNear,
                 zFar);
     }
@@ -45,7 +48,7 @@ public class PerspectiveCamera extends Camera {
     public void updateAspectRatio(int width, int height) {
         projection.setPerspective(
                 (float) Math.toRadians(FOV),
-                (float) viewportWidth / (float) viewportHeight,
+                (float) width / (float) height,
                 zNear,
                 zFar);
     }

@@ -21,6 +21,9 @@ public class OrthographicCamera extends Camera {
         this.right = right;
         this.bottom = bottom;
         this.top = top;
+        create();
+        createUBO();
+        update();
     }
 
     @Override
