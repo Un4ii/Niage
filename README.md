@@ -1,7 +1,7 @@
 # TODO
 
--   First Person Controller
--   ModelUtils
+1.  Specular + shininess missing
+2.  Other lighting
 
 # UBOs
 
@@ -23,7 +23,8 @@
 -   sampler2D diffuseTexture
 -   sampler2D specularTexture
 -   float shininess
--   bool useTextures
+-   bool useDiffuseTexture
+-   bool useSpecularTexture
 
 # Model struct
 
