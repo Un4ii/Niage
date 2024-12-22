@@ -63,8 +63,9 @@ public class PerspectiveCamera extends Camera {
         front.set(x, y, z).sub(position).normalize();
     }
 
-    private int cameraUBO;
+    // projection view position+(padding)
     private final int uboSize = (16 * 4) + (16 * 4) + (4 * 4);
+    private int cameraUBO;
 
     private FloatBuffer buffer;
 
@@ -93,7 +94,7 @@ public class PerspectiveCamera extends Camera {
 
         int error = GL11.glGetError();
         if (error != GL11.GL_NO_ERROR) {
-            throw new RuntimeException("ERROR::CAMERA::PERSPECTIVE::UBO::UPDATE\\n" + error);
+            throw new RuntimeException("ERROR::CAMERA::PERSPECTIVE::UBO::UPDATE\n" + error);
         }
     }
 

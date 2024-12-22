@@ -57,19 +57,26 @@ public class Shader {
         GL20.glDeleteShader(vertex);
         GL20.glDeleteShader(fragment);
 
-        // Bind Camera Matrices
-        int cameraUniformIndex = GL31.glGetUniformBlockIndex(ID, "PerspectiveCamera");
-        if (cameraUniformIndex != -1) {
-            GL31.glUniformBlockBinding(ID, cameraUniformIndex, 0);
+        // Bind UBOs
+        int uniformIndex = GL31.glGetUniformBlockIndex(ID, "PerspectiveCamera");
+        if (uniformIndex != -1) {
+            GL31.glUniformBlockBinding(ID, uniformIndex, 0);
         } else {
             System.err.println("WARNING::SHADER::UBO::PERSPECTIVE\nCamera uniform not found");
         }
 
-        cameraUniformIndex = GL31.glGetUniformBlockIndex(ID, "OrthographicCamera");
-        if (cameraUniformIndex != -1) {
-            GL31.glUniformBlockBinding(ID, cameraUniformIndex, 0);
+        uniformIndex = GL31.glGetUniformBlockIndex(ID, "OrthographicCamera");
+        if (uniformIndex != -1) {
+            GL31.glUniformBlockBinding(ID, uniformIndex, 1);
         } else {
             System.err.println("WARNING::SHADER::UBO::ORTHOGRAPHIC\nCamera uniform not found");
+        }
+
+        uniformIndex = GL31.glGetUniformBlockIndex(ID, "Lighting");
+        if (uniformIndex != -1) {
+            GL31.glUniformBlockBinding(ID, uniformIndex, 2);
+        } else {
+            System.err.println("WARNING::SHADER::UBO::LIGHTING\nLighting uniform not found");
         }
     }
 

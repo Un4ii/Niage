@@ -1,11 +1,15 @@
 package net.niage.game;
 
+import org.joml.Math;
+import org.joml.Vector3f;
+
 import net.niage.engine.camera.FirstPersonController;
 import net.niage.engine.camera.PerspectiveCamera;
 import net.niage.engine.core.Engine;
 import net.niage.engine.graphics.Model;
 import net.niage.engine.graphics.Renderer;
 import net.niage.engine.graphics.Shader;
+import net.niage.engine.lighting.LightScene;
 import net.niage.engine.utils.ModelUtils;
 
 public class Game extends Engine {
@@ -17,9 +21,10 @@ public class Game extends Engine {
     private PerspectiveCamera camera;
     private FirstPersonController controller;
 
-    private Shader shader;
     private Renderer renderer;
+    private LightScene lightScene;
 
+    private Shader cubeShader;
     private Model cube;
 
     @Override
@@ -27,7 +32,7 @@ public class Game extends Engine {
         timer.setFrameRate(-1);
         window.setvSync(false);
         camera = new PerspectiveCamera(70, 0.01f, 100.0f, window.getWidth(), window.getHeight());
-        camera.position().set(2.0f, 2.0f, -2f);
+        camera.position().set(0f, 3.0f, -3f);
         camera.lookAt(0, 0, 0);
         camera.update();
 
@@ -35,10 +40,15 @@ public class Game extends Engine {
         controller.setWalkVelocity(5f);
         controller.setRunVelocity(10f);
 
-        shader = new Shader("assets/cube.vs", "assets/cube.fs");
         renderer = new Renderer();
+        lightScene = new LightScene();
+        lightScene.sunDirection().set(1, 0.5, 0.2);
 
+        cubeShader = new Shader("assets/shaders/default.vs", "assets/shaders/default.fs");
         cube = ModelUtils.loadModel("assets/models/cube/untitled.gltf");
+
+        cube.transform().rotate(Math.toRadians(45), new Vector3f(0, 1, 0));
+        cube.transform().rotate(Math.toRadians(45), new Vector3f(1, 0, 0));
     }
 
     @Override
@@ -47,9 +57,8 @@ public class Game extends Engine {
         camera.update();
 
         Renderer.glClear(Renderer.COLOR_BUFFER_BIT | Renderer.DEPTH_BUFFER_BIT);
-        Renderer.glClearColor(0, 0, 0, 0);
 
-        renderer.start(shader);
+        renderer.start(cubeShader);
         renderer.render(cube);
         renderer.end();
     }
@@ -66,7 +75,7 @@ public class Game extends Engine {
 
     @Override
     protected void cleanup() {
-        shader.dispose();
+        cubeShader.dispose();
         cube.dispose();
         camera.dispose();
     }

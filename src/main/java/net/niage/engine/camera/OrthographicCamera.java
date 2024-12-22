@@ -73,8 +73,10 @@ public class OrthographicCamera extends Camera {
         front.set(x, y, z).sub(position).normalize();
     }
 
+    // projection view position
+    private final int uboSize = (16 * 4) + (16 * 4) + (4 * 4);
     private int cameraUBO;
-    private final int uboSize = 16 * 4 + 16 * 4 + 3 * 4;
+
     private FloatBuffer buffer;
 
     @Override
@@ -83,7 +85,7 @@ public class OrthographicCamera extends Camera {
 
         GL15.glBindBuffer(GL31.GL_UNIFORM_BUFFER, cameraUBO);
         GL15.glBufferData(GL31.GL_UNIFORM_BUFFER, uboSize, GL15.GL_DYNAMIC_DRAW);
-        GL30.glBindBufferBase(GL31.GL_UNIFORM_BUFFER, 0, cameraUBO);
+        GL30.glBindBufferBase(GL31.GL_UNIFORM_BUFFER, 1, cameraUBO);
 
         buffer = BufferUtils.createFloatBuffer(uboSize / Float.BYTES);
     }
