@@ -1,8 +1,5 @@
 package net.niage.game;
 
-import org.joml.Math;
-import org.joml.Vector3f;
-
 import net.niage.engine.camera.FirstPersonController;
 import net.niage.engine.camera.PerspectiveCamera;
 import net.niage.engine.core.Engine;
@@ -24,7 +21,7 @@ public class Game extends Engine {
     private Renderer renderer;
     private LightScene lightScene;
 
-    private Shader cubeShader;
+    private Shader objectShader;
     private Model cube;
 
     @Override
@@ -44,11 +41,8 @@ public class Game extends Engine {
         lightScene = new LightScene();
         lightScene.sunDirection().set(1, 0.5, 0.2);
 
-        cubeShader = new Shader("assets/shaders/default.vs", "assets/shaders/default.fs");
-        cube = ModelUtils.loadModel("assets/models/cube/untitled.gltf");
-
-        cube.transform().rotate(Math.toRadians(45), new Vector3f(0, 1, 0));
-        cube.transform().rotate(Math.toRadians(45), new Vector3f(1, 0, 0));
+        objectShader = new Shader("assets/shaders/default.vs", "assets/shaders/default.fs");
+        cube = ModelUtils.loadModel("assets/models/cube/untitled2.gltf");
     }
 
     @Override
@@ -58,7 +52,7 @@ public class Game extends Engine {
 
         Renderer.glClear(Renderer.COLOR_BUFFER_BIT | Renderer.DEPTH_BUFFER_BIT);
 
-        renderer.start(cubeShader);
+        renderer.start(objectShader);
         renderer.render(cube);
         renderer.end();
     }
@@ -75,7 +69,7 @@ public class Game extends Engine {
 
     @Override
     protected void cleanup() {
-        cubeShader.dispose();
+        objectShader.dispose();
         cube.dispose();
         camera.dispose();
     }

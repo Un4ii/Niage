@@ -8,7 +8,7 @@ import org.joml.Matrix4f;
 public class Model {
 
     private final List<Mesh> meshes;
-    private Matrix4f transform = new Matrix4f().translation(0.0f, 0.0f, 0.0f);
+    private Matrix4f transform = new Matrix4f().identity();
 
     public Model(List<Mesh> meshes) {
         this.meshes = meshes;
