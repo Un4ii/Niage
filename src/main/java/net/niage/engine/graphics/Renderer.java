@@ -1,5 +1,6 @@
 package net.niage.engine.graphics;
 
+import org.joml.Matrix4f;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
@@ -22,7 +23,7 @@ public class Renderer {
             mesh.material().specularTexture().activate();
             GL30.glBindVertexArray(mesh.VAO());
 
-            shader.setMat4("model.transform", model.transform());
+            shader.setMat4("model.transform", new Matrix4f(model.transform()).mul(mesh.transform()));
             setMeshMaterial(mesh);
             GL20.glDrawElements(GL20.GL_TRIANGLES, mesh.indicesLenght(), GL20.GL_UNSIGNED_INT, 0);
 

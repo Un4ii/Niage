@@ -11,10 +11,12 @@ public class Mesh {
     private int indicesLenght;
 
     private Material material;
+    private Matrix4f transform;
 
-    public Mesh(float[] vertices, int[] indices, Material material) {
+    public Mesh(float[] vertices, int[] indices, Material material, Matrix4f transform) {
         this.material = material;
         this.indicesLenght = indices.length;
+        this.transform = transform;
 
         init(vertices, indices);
     }
@@ -71,5 +73,9 @@ public class Mesh {
 
     public int indicesLenght() {
         return indicesLenght;
+    }
+
+    public Matrix4f transform() {
+        return transform;
     }
 }

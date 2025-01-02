@@ -5,11 +5,14 @@ import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.lwjgl.assimp.AIColor4D;
 import org.lwjgl.assimp.AIFace;
 import org.lwjgl.assimp.AIMaterial;
+import org.lwjgl.assimp.AIMatrix4x4;
 import org.lwjgl.assimp.AIMesh;
+import org.lwjgl.assimp.AINode;
 import org.lwjgl.assimp.AIScene;
 import org.lwjgl.assimp.AIString;
 import org.lwjgl.assimp.AIVector3D;
@@ -33,20 +36,46 @@ public class ModelUtils {
         }
 
         List<Mesh> meshes = new ArrayList<>();
+        processNode(scene.mRootNode(), scene, meshes, new Matrix4f().identity(), modelPath);
+        return new Model(meshes);
+    }
 
-        for (int i = 0; i < scene.mNumMeshes(); i++) {
+    private static void processNode(AINode node, AIScene scene, List<Mesh> meshes, Matrix4f parentTransform,
+            String modelPath) throws IOException {
+        // Convierte la transformación local del nodo a Matrix4f (JOML)
+        Matrix4f nodeTransform = convertMatrix(node.mTransformation());
+        Matrix4f globalTransform = new Matrix4f(parentTransform).mul(nodeTransform);
 
-            AIMesh mesh = AIMesh.create(scene.mMeshes().get(i));
+        // Procesa las mallas asociadas al nodo
+        for (int i = 0; i < node.mNumMeshes(); i++) {
+            int meshIndex = node.mMeshes().get(i);
+            AIMesh mesh = AIMesh.create(scene.mMeshes().get(meshIndex));
 
             try {
-                meshes.add(new Mesh(processVertices(mesh), processIndices(mesh),
-                        processMaterial(scene, mesh, modelPath)));
+                Mesh processedMesh = new Mesh(
+                        processVertices(mesh),
+                        processIndices(mesh),
+                        processMaterial(scene, mesh, modelPath),
+                        globalTransform);
+                meshes.add(processedMesh);
             } catch (IllegalArgumentException | IllegalStateException e) {
-                throw new IOException("ERROR::MESH::PROCESSING_FAILED at mesh " + i + ":\n" + e);
+                System.err.println("ERROR::MESH::PROCESSING_FAILED at mesh " + i + ":\n" + e);
             }
         }
 
-        return new Model(meshes);
+        // Procesa los nodos hijos recursivamente
+        for (int i = 0; i < node.mNumChildren(); i++) {
+            processNode(AINode.create(node.mChildren().get(i)), scene, meshes, globalTransform, modelPath);
+        }
+    }
+
+    private static Matrix4f convertMatrix(AIMatrix4x4 aiMatrix) {
+        // Convierte una matriz de Assimp (AIMatrix4x4) a JOML (Matrix4f)
+        return new Matrix4f(
+                aiMatrix.a1(), aiMatrix.b1(), aiMatrix.c1(), aiMatrix.d1(),
+                aiMatrix.a2(), aiMatrix.b2(), aiMatrix.c2(), aiMatrix.d2(),
+                aiMatrix.a3(), aiMatrix.b3(), aiMatrix.c3(), aiMatrix.d3(),
+                aiMatrix.a4(), aiMatrix.b4(), aiMatrix.c4(), aiMatrix.d4());
     }
 
     private static float[] processVertices(AIMesh mesh) {
