@@ -1,9 +1,13 @@
 package net.niage.engine.graphics;
 
+import java.util.List;
+
 import org.joml.Matrix4f;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
+
+import net.niage.animation.Animation;
 
 public class Mesh {
 
@@ -12,11 +16,13 @@ public class Mesh {
 
     private Material material;
     private Matrix4f transform;
+    private List<Animation> animations;
 
-    public Mesh(float[] vertices, int[] indices, Material material, Matrix4f transform) {
+    public Mesh(float[] vertices, int[] indices, Material material, Matrix4f transform, List<Animation> animations) {
         this.material = material;
         this.indicesLenght = indices.length;
         this.transform = transform;
+        this.animations = animations;
 
         init(vertices, indices);
     }
@@ -77,5 +83,9 @@ public class Mesh {
 
     public Matrix4f transform() {
         return transform;
+    }
+
+    public List<Animation> animations() {
+        return this.animations;
     }
 }

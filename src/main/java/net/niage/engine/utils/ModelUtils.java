@@ -56,7 +56,8 @@ public class ModelUtils {
                         processVertices(mesh),
                         processIndices(mesh),
                         processMaterial(scene, mesh, modelPath),
-                        globalTransform);
+                        globalTransform,
+                        null);
                 meshes.add(processedMesh);
             } catch (IllegalArgumentException | IllegalStateException e) {
                 System.err.println("ERROR::MESH::PROCESSING_FAILED at mesh " + i + ":\n" + e);

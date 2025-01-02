@@ -8,12 +8,14 @@ import org.lwjgl.opengl.GL30;
 public class Renderer {
 
     private Shader shader;
+    private double deltaTime = 0;
 
     public Renderer() {
     }
 
-    public void start(Shader shader) {
+    public void start(Shader shader, double deltaTime) {
         this.shader = shader;
+        this.deltaTime = deltaTime;
         this.shader.bind();
     }
 
@@ -25,6 +27,9 @@ public class Renderer {
 
             shader.setMat4("model.transform", new Matrix4f(model.transform()).mul(mesh.transform()));
             setMeshMaterial(mesh);
+            mesh.animations().forEach(anim -> {
+                anim.update(deltaTime);
+            });
             GL20.glDrawElements(GL20.GL_TRIANGLES, mesh.indicesLenght(), GL20.GL_UNSIGNED_INT, 0);
 
             mesh.material().diffuseTexture().deactivate();
@@ -60,4 +65,5 @@ public class Renderer {
     public static void glClearColor(float r, float g, float b, float a) {
         GL11.glClearColor(r, g, b, a);
     }
+
 }

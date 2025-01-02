@@ -52,7 +52,7 @@ public class Game extends Engine {
 
         Renderer.glClear(Renderer.COLOR_BUFFER_BIT | Renderer.DEPTH_BUFFER_BIT);
 
-        renderer.start(objectShader);
+        renderer.start(objectShader, deltaTime);
         renderer.render(cube);
         renderer.end();
     }
