@@ -1,8 +1,3 @@
-# TODO
-
-1.  Specular + shininess missing
-2.  Other lighting
-
 # UBOs
 
 0. Perspective Camera -- "PerspectiveCamera"
