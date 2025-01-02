@@ -42,7 +42,9 @@ public class Game extends Engine {
         lightScene.sunDirection().set(1, 0.5, 0.2);
 
         objectShader = new Shader("assets/shaders/default.vs", "assets/shaders/default.fs");
-        cube = ModelUtils.loadModel("assets/models/cube/untitled2.gltf");
+        cube = ModelUtils.loadModel("assets/models/animation/animation.gltf");
+
+        // cube.startAnimation("TorusAction");
     }
 
     @Override

@@ -6,18 +6,28 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.joml.Matrix4f;
+import org.joml.Quaternionf;
 import org.joml.Vector3f;
+import org.lwjgl.assimp.AIAnimation;
+import org.lwjgl.assimp.AIBone;
 import org.lwjgl.assimp.AIColor4D;
 import org.lwjgl.assimp.AIFace;
 import org.lwjgl.assimp.AIMaterial;
 import org.lwjgl.assimp.AIMatrix4x4;
 import org.lwjgl.assimp.AIMesh;
 import org.lwjgl.assimp.AINode;
+import org.lwjgl.assimp.AINodeAnim;
+import org.lwjgl.assimp.AIQuatKey;
 import org.lwjgl.assimp.AIScene;
 import org.lwjgl.assimp.AIString;
 import org.lwjgl.assimp.AIVector3D;
+import org.lwjgl.assimp.AIVectorKey;
 import org.lwjgl.assimp.Assimp;
 
+import net.niage.animation.Animation;
+import net.niage.animation.Bone;
+import net.niage.animation.BoneAnimation;
+import net.niage.animation.KeyFrame;
 import net.niage.engine.graphics.Material;
 import net.niage.engine.graphics.Mesh;
 import net.niage.engine.graphics.Model;
@@ -57,7 +67,8 @@ public class ModelUtils {
                         processIndices(mesh),
                         processMaterial(scene, mesh, modelPath),
                         globalTransform,
-                        null);
+                        processAnimations(scene, mesh),
+                        processBones(mesh));
                 meshes.add(processedMesh);
             } catch (IllegalArgumentException | IllegalStateException e) {
                 System.err.println("ERROR::MESH::PROCESSING_FAILED at mesh " + i + ":\n" + e);
@@ -185,4 +196,92 @@ public class ModelUtils {
         return new Material(diffuse, specular, shininess, diffuseTexture, specularTexture, useDiffuseTexture,
                 useSpecularTexture);
     }
+
+    private static List<Bone> processBones(AIMesh mesh) throws IOException {
+        List<Bone> bones = new ArrayList<>();
+
+        // if (mesh.mNumBones() == 0)
+        // throw new IOException("ERROR::MESH::NO_BONES_FOUND");
+
+        for (int i = 0; i < mesh.mNumBones(); i++) {
+            // Cada hueso de la malla
+            AIBone aiBone = AIBone.create(mesh.mBones().get(i));
+
+            AIMatrix4x4 boneTransform = aiBone.mOffsetMatrix();
+            Matrix4f transform = new Matrix4f(
+                    boneTransform.a1(), boneTransform.b1(), boneTransform.c1(), boneTransform.d1(),
+                    boneTransform.a2(), boneTransform.b2(), boneTransform.c2(), boneTransform.d2(),
+                    boneTransform.a3(), boneTransform.b3(), boneTransform.c3(), boneTransform.d3(),
+                    boneTransform.a4(), boneTransform.b4(), boneTransform.c4(), boneTransform.d4());
+
+            Vector3f position = new Vector3f();
+            Quaternionf rotation = new Quaternionf();
+            Vector3f scale = new Vector3f();
+
+            transform.getTranslation(position);
+            transform.getNormalizedRotation(rotation);
+            transform.getScale(scale);
+
+            bones.add(new Bone(aiBone.mName().dataString(), position, rotation, scale));
+
+        }
+
+        return bones;
+    }
+
+    private static List<BoneAnimation> processBoneAnimations(AIAnimation aiAnimation, AIMesh mesh) throws IOException {
+        List<BoneAnimation> boneAnimations = new ArrayList<>();
+        List<Bone> bones = processBones(mesh);
+
+        for (int i = 0; i < aiAnimation.mNumChannels(); i++) {
+            AINodeAnim aiNodeAnim = AINodeAnim.create(aiAnimation.mChannels().get(i));
+
+            List<KeyFrame> keyFrames = new ArrayList<>();
+            int totalKeyFrames = Math.max(aiNodeAnim.mNumPositionKeys(), Math.max(
+                    aiNodeAnim.mNumScalingKeys(), aiNodeAnim.mNumRotationKeys()));
+
+            for (int j = 0; j < totalKeyFrames; j++) {
+                AIVectorKey pos = aiNodeAnim.mPositionKeys().get(i);
+                AIQuatKey rot = aiNodeAnim.mRotationKeys().get(i);
+                AIVectorKey scl = aiNodeAnim.mScalingKeys().get(i);
+
+                Vector3f position = new Vector3f(pos.mValue().x(), pos.mValue().y(), pos.mValue().z());
+                Quaternionf rotation = new Quaternionf(rot.mValue().x(), rot.mValue().y(), rot.mValue().z(),
+                        rot.mValue().w());
+                Vector3f scale = new Vector3f(scl.mValue().x(), scl.mValue().y(), scl.mValue().z());
+
+                keyFrames.add(new KeyFrame(j, position, rotation, scale));
+            }
+
+            String boneName = aiNodeAnim.mNodeName().dataString();
+            Bone bone = null;
+            bones.forEach(b -> {
+                if (b.name().equals(boneName))
+                    b = bone;
+            });
+
+            boneAnimations.add(new BoneAnimation(bone, keyFrames));
+        }
+
+        return boneAnimations;
+    }
+
+    private static List<Animation> processAnimations(AIScene scene, AIMesh mesh) throws IOException {
+        List<Animation> animations = new ArrayList<>();
+
+        for (int i = 0; i < scene.mNumAnimations(); i++) {
+            AIAnimation aiAnimation = AIAnimation.create(scene.mAnimations().get(i));
+
+            List<BoneAnimation> boneAnimations = processBoneAnimations(aiAnimation, mesh);
+
+            AINodeAnim aiNodeAnim = AINodeAnim.create(aiAnimation.mChannels().get(i));
+            int totalKeyFrames = Math.max(aiNodeAnim.mNumPositionKeys(), Math.max(
+                    aiNodeAnim.mNumScalingKeys(), aiNodeAnim.mNumRotationKeys()));
+
+            animations.add(new Animation(aiAnimation.mName().dataString(), boneAnimations, totalKeyFrames));
+        }
+
+        return animations;
+    }
+
 }

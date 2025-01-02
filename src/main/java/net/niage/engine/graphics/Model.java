@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.joml.Matrix4f;
 
+import net.niage.animation.Animation;
+
 public class Model {
 
     private final List<Mesh> meshes;
@@ -30,4 +32,72 @@ public class Model {
     public Matrix4f transform() {
         return transform;
     }
+
+    public void startAnimation(String animationName) {
+        meshes.forEach(mesh -> {
+            mesh.animations().forEach(anim -> {
+                if (anim.name().equals(animationName))
+                    anim.start();
+            });
+        });
+    }
+
+    public void pauseAnimation(String animationName) {
+        meshes.forEach(mesh -> {
+            mesh.animations().forEach(anim -> {
+                if (anim.name().equals(animationName))
+                    anim.pause();
+            });
+        });
+    }
+
+    public void resumeAnimation(String animationName) {
+        meshes.forEach(mesh -> {
+            mesh.animations().forEach(anim -> {
+                if (anim.name().equals(animationName))
+                    anim.resume();
+            });
+        });
+    }
+
+    public void stopAnimation(String animationName) {
+        meshes.forEach(mesh -> {
+            mesh.animations().forEach(anim -> {
+                if (anim.name().equals(animationName))
+                    anim.stop();
+            });
+        });
+    }
+
+    public void loopAnimation(String animationName, boolean loop) {
+        meshes.forEach(mesh -> {
+            mesh.animations().forEach(anim -> {
+                if (anim.name().equals(animationName))
+                    anim.setLoop(loop);
+            });
+        });
+    }
+
+    public boolean isLoopAnimation(String animationName) {
+        for (Mesh mesh : meshes) {
+            for (Animation anim : mesh.animations()) {
+                if (anim.name().equals(animationName) && anim.loop() == true) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean isAnimating(String animationName) {
+        for (Mesh mesh : meshes) {
+            for (Animation anim : mesh.animations()) {
+                if (anim.name().equals(animationName) && anim.animating() == true) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
 }

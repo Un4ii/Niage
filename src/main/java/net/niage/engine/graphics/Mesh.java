@@ -8,6 +8,7 @@ import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 
 import net.niage.animation.Animation;
+import net.niage.animation.Bone;
 
 public class Mesh {
 
@@ -16,9 +17,12 @@ public class Mesh {
 
     private Material material;
     private Matrix4f transform;
-    private List<Animation> animations;
 
-    public Mesh(float[] vertices, int[] indices, Material material, Matrix4f transform, List<Animation> animations) {
+    private List<Animation> animations;
+    private List<Bone> bones;
+
+    public Mesh(float[] vertices, int[] indices, Material material, Matrix4f transform, List<Animation> animations,
+            List<Bone> bones) {
         this.material = material;
         this.indicesLenght = indices.length;
         this.transform = transform;
@@ -87,5 +91,9 @@ public class Mesh {
 
     public List<Animation> animations() {
         return this.animations;
+    }
+
+    public List<Bone> bones() {
+        return bones;
     }
 }

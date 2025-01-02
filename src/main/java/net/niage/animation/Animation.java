@@ -32,7 +32,7 @@ public class Animation {
 
     public void update(double deltaTime) {
         if (animating) {
-            currentTime += deltaTime;
+            currentTime += 1;
 
             if (currentTime > duration) {
                 if (loop) {
@@ -85,6 +85,11 @@ public class Animation {
 
     public String name() {
         return name;
+    }
+
+    public void start() {
+        animating = true;
+        currentTime = 0;
     }
 
     public void pause() {

@@ -8,7 +8,7 @@
 		{
 			"name":"Scene",
 			"nodes":[
-				0
+				2
 			]
 		}
 	],
@@ -16,6 +16,16 @@
 		{
 			"mesh":0,
 			"name":"Torus"
+		},
+		{
+			"name":"Bone"
+		},
+		{
+			"children":[
+				0,
+				1
+			],
+			"name":"Armature"
 		}
 	],
 	"animations":[
@@ -24,17 +34,53 @@
 				{
 					"sampler":0,
 					"target":{
-						"node":0,
+						"node":1,
+						"path":"translation"
+					}
+				},
+				{
+					"sampler":1,
+					"target":{
+						"node":1,
+						"path":"rotation"
+					}
+				},
+				{
+					"sampler":2,
+					"target":{
+						"node":1,
+						"path":"scale"
+					}
+				},
+				{
+					"sampler":3,
+					"target":{
+						"node":2,
 						"path":"rotation"
 					}
 				}
 			],
-			"name":"TorusAction",
+			"name":"ArmatureAction",
 			"samplers":[
 				{
 					"input":4,
-					"interpolation":"LINEAR",
+					"interpolation":"STEP",
 					"output":5
+				},
+				{
+					"input":4,
+					"interpolation":"STEP",
+					"output":6
+				},
+				{
+					"input":4,
+					"interpolation":"STEP",
+					"output":7
+				},
+				{
+					"input":8,
+					"interpolation":"LINEAR",
+					"output":9
 				}
 			]
 		}
@@ -45,9 +91,9 @@
 			"name":"Material.001",
 			"pbrMetallicRoughness":{
 				"baseColorFactor":[
-					0,
-					0.0048772976733744144,
-					0.8002749681472778,
+					0.004698656499385834,
+					0.8001810312271118,
+					0.209985613822937,
 					1
 				],
 				"metallicFactor":0,
@@ -69,6 +115,15 @@
 					"material":0
 				}
 			]
+		}
+	],
+	"skins":[
+		{
+			"inverseBindMatrices":10,
+			"joints":[
+				1
+			],
+			"name":"Armature"
 		}
 	],
 	"accessors":[
@@ -109,20 +164,56 @@
 		{
 			"bufferView":4,
 			"componentType":5126,
-			"count":60,
+			"count":2,
 			"max":[
 				2.5
 			],
 			"min":[
-				0.041666666666666664
+				0
 			],
 			"type":"SCALAR"
 		},
 		{
 			"bufferView":5,
 			"componentType":5126,
-			"count":60,
+			"count":2,
+			"type":"VEC3"
+		},
+		{
+			"bufferView":6,
+			"componentType":5126,
+			"count":2,
 			"type":"VEC4"
+		},
+		{
+			"bufferView":7,
+			"componentType":5126,
+			"count":2,
+			"type":"VEC3"
+		},
+		{
+			"bufferView":8,
+			"componentType":5126,
+			"count":61,
+			"max":[
+				2.5
+			],
+			"min":[
+				0
+			],
+			"type":"SCALAR"
+		},
+		{
+			"bufferView":9,
+			"componentType":5126,
+			"count":61,
+			"type":"VEC4"
+		},
+		{
+			"bufferView":10,
+			"componentType":5126,
+			"count":1,
+			"type":"MAT4"
 		}
 	],
 	"bufferViews":[
@@ -152,18 +243,43 @@
 		},
 		{
 			"buffer":0,
-			"byteLength":240,
+			"byteLength":8,
 			"byteOffset":80640
 		},
 		{
 			"buffer":0,
-			"byteLength":960,
-			"byteOffset":80880
+			"byteLength":24,
+			"byteOffset":80648
+		},
+		{
+			"buffer":0,
+			"byteLength":32,
+			"byteOffset":80672
+		},
+		{
+			"buffer":0,
+			"byteLength":24,
+			"byteOffset":80704
+		},
+		{
+			"buffer":0,
+			"byteLength":244,
+			"byteOffset":80728
+		},
+		{
+			"buffer":0,
+			"byteLength":976,
+			"byteOffset":80972
+		},
+		{
+			"buffer":0,
+			"byteLength":64,
+			"byteOffset":81948
 		}
 	],
 	"buffers":[
 		{
-			"byteLength":81840,
+			"byteLength":82012,
 			"uri":"animation.bin"
 		}
 	]
