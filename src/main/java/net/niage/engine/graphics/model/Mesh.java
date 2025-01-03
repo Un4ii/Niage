@@ -1,27 +1,62 @@
-package net.niage.engine.graphics;
+package net.niage.engine.graphics.model;
+
+import java.util.List;
 
 import org.joml.Matrix4f;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 
+import net.niage.engine.graphics.Material;
+import net.niage.engine.graphics.animation.Bone;
+import net.niage.engine.graphics.animation.BoneInfluence;
+
 public class Mesh {
 
     private int VAO, VBO, EBO;
-    private int indicesLenght;
+
+    private final List<Vertex> vertices;
+    private final int[] indices;
+    private final int indicesLenght;
 
     private Material material;
     private Matrix4f transform;
 
-    public Mesh(float[] vertices, int[] indices, Material material, Matrix4f transform) {
-        this.material = material;
-        this.indicesLenght = indices.length;
-        this.transform = transform;
+    private final List<Bone> bones;
 
-        init(vertices, indices);
+    public Mesh(List<Vertex> vertices, int[] indices, Material material, Matrix4f transform, List<Bone> bones) {
+        this.vertices = vertices;
+        this.indices = indices;
+        this.indicesLenght = indices.length;
+        this.material = material;
+        this.transform = transform;
+        this.bones = bones;
+
+        init();
     }
 
-    private void init(float[] vertices, int[] indices) {
+    private void init() {
+        // Parse vertices into array
+        float[] vertexData = new float[vertices.size() * 8];
+        int index = 0;
+        for (int i = 0; i < vertices.size(); i++) {
+            Vertex vertex = vertices.get(i);
+
+            // Vertex position
+            vertexData[index++] = vertex.position().x();
+            vertexData[index++] = vertex.position().y();
+            vertexData[index++] = vertex.position().z();
+
+            // Normals
+            vertexData[index++] = vertex.normal().x();
+            vertexData[index++] = vertex.normal().y();
+            vertexData[index++] = vertex.normal().z();
+
+            // Texture coords
+            vertexData[index++] = vertex.textCoords().x();
+            vertexData[index++] = vertex.textCoords().y();
+        }
+
         // Create VAO, VBO & EBO
         VAO = GL30.glGenVertexArrays();
         VBO = GL15.glGenBuffers();
@@ -32,7 +67,7 @@ public class Mesh {
 
         // Bind the VBO to the VAO and put the vertex info into the VBO
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, VBO);
-        GL15.glBufferData(GL15.GL_ARRAY_BUFFER, vertices, GL15.GL_STATIC_DRAW);
+        GL15.glBufferData(GL15.GL_ARRAY_BUFFER, vertexData, GL15.GL_STATIC_DRAW);
 
         // Bind the EBO to the VAO and put the indices info into the EBO
         GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, EBO);

@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.joml.Matrix4f;
+import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.lwjgl.assimp.AIColor4D;
 import org.lwjgl.assimp.AIFace;
@@ -19,13 +20,14 @@ import org.lwjgl.assimp.AIVector3D;
 import org.lwjgl.assimp.Assimp;
 
 import net.niage.engine.graphics.Material;
-import net.niage.engine.graphics.Mesh;
-import net.niage.engine.graphics.Model;
+import net.niage.engine.graphics.model.Mesh;
+import net.niage.engine.graphics.model.Model;
+import net.niage.engine.graphics.model.Vertex;
 import net.niage.engine.texture.Texture2D;
 
-public class ModelUtils {
+public class ModelLoader {
 
-    public static Model loadModel(String modelPath) throws IOException {
+    public static Model load(String modelPath) throws IOException {
         final AIScene scene = Assimp.aiImportFile(FileUtils.getFullPath(modelPath),
                 Assimp.aiProcess_CalcTangentSpace
                         | Assimp.aiProcess_Triangulate | Assimp.aiProcess_JoinIdenticalVertices
@@ -56,7 +58,8 @@ public class ModelUtils {
                         processVertices(mesh),
                         processIndices(mesh),
                         processMaterial(scene, mesh, modelPath),
-                        globalTransform);
+                        globalTransform,
+                        null);
                 meshes.add(processedMesh);
             } catch (IllegalArgumentException | IllegalStateException e) {
                 System.err.println("ERROR::MESH::PROCESSING_FAILED at mesh " + i + ":\n" + e);
@@ -78,34 +81,34 @@ public class ModelUtils {
                 aiMatrix.a4(), aiMatrix.b4(), aiMatrix.c4(), aiMatrix.d4());
     }
 
-    private static float[] processVertices(AIMesh mesh) {
-        float[] vertices = new float[mesh.mNumVertices() * 8];
+    private static List<Vertex> processVertices(AIMesh mesh) {
+        List<Vertex> vertices = new ArrayList<>();
 
         AIVector3D.Buffer vertexPos = mesh.mVertices();
         AIVector3D.Buffer normals = mesh.mNormals();
         AIVector3D.Buffer textCoords = mesh.mTextureCoords(0);
 
-        int index = 0;
-
         for (int i = 0; i < mesh.mNumVertices(); i++) {
-            // Vertex position
-            vertices[index++] = vertexPos.get(i).x();
-            vertices[index++] = vertexPos.get(i).y();
-            vertices[index++] = vertexPos.get(i).z();
+            Vector3f pos = new Vector3f(
+                    vertexPos.get(i).x(),
+                    vertexPos.get(i).y(),
+                    vertexPos.get(i).z());
 
-            // Normals
-            vertices[index++] = normals.get(i).x();
-            vertices[index++] = normals.get(i).y();
-            vertices[index++] = normals.get(i).z();
+            Vector3f norm = new Vector3f(
+                    normals.get(i).x(),
+                    normals.get(i).y(),
+                    normals.get(i).z());
 
-            // Texture coords
+            Vector2f text;
             if (textCoords != null) {
-                vertices[index++] = textCoords.get(i).x();
-                vertices[index++] = textCoords.get(i).y();
+                text = new Vector2f(
+                        textCoords.get(i).x(),
+                        textCoords.get(i).y());
             } else {
-                vertices[index++] = 0.0f;
-                vertices[index++] = 0.0f;
+                text = new Vector2f(0f, 0f);
             }
+
+            vertices.add(new Vertex(pos, norm, text, null));
         }
 
         return vertices;

@@ -3,11 +3,11 @@ package net.niage.game;
 import net.niage.engine.camera.FirstPersonController;
 import net.niage.engine.camera.PerspectiveCamera;
 import net.niage.engine.core.Engine;
-import net.niage.engine.graphics.Model;
 import net.niage.engine.graphics.Renderer;
 import net.niage.engine.graphics.Shader;
+import net.niage.engine.graphics.model.Model;
 import net.niage.engine.lighting.LightScene;
-import net.niage.engine.utils.ModelUtils;
+import net.niage.engine.utils.ModelLoader;
 
 public class Game extends Engine {
 
@@ -42,7 +42,7 @@ public class Game extends Engine {
         lightScene.sunDirection().set(1, 0.5, 0.2);
 
         objectShader = new Shader("assets/shaders/default.vs", "assets/shaders/default.fs");
-        cube = ModelUtils.loadModel("assets/models/cube/untitled2.gltf");
+        cube = ModelLoader.load("assets/models/cube/untitled2.gltf");
     }
 
     @Override

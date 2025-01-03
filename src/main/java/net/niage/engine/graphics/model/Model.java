@@ -1,4 +1,4 @@
-package net.niage.engine.graphics;
+package net.niage.engine.graphics.model;
 
 import java.util.ArrayList;
 import java.util.List;

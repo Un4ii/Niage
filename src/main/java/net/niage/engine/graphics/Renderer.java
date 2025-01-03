@@ -5,6 +5,9 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 
+import net.niage.engine.graphics.model.Mesh;
+import net.niage.engine.graphics.model.Model;
+
 public class Renderer {
 
     private Shader shader;
